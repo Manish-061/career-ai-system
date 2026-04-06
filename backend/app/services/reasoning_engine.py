@@ -1,11 +1,13 @@
 from app.utils.helpers import load_knowledge_base
 from app.utils.scoring import compute_skill_score
+
+from app.services.normalizer import build_user_skill_map
 from app.services.matcher import match_skills
+from app.services.skill_gap import get_skill_gap
+from app.services.explanation import generate_explanation
 from app.services.domain_engine import get_domain_weights
 
 KB = load_knowledge_base()
-
-MIN_SCORE_THRESHOLD = 0.4
 
 
 def get_readiness(score):
@@ -33,41 +35,32 @@ def generate_transition(role):
     return transitions.get(role, "Build required skills and gain experience step by step")
 
 
-def generate_explanation(role, matched, missing, score, readiness, transition):
-    matched_str = ", ".join(matched) if matched else "no strong matching skills yet"
-    missing_str = ", ".join(missing)
-
-    return (
-        f"You are best suited for {role} with a match score of {round(score,2)}. "
-        f"Your strengths include {matched_str}. "
-        f"You need to improve in {missing_str}. "
-        f"Your readiness level is {readiness}. "
-        f"Suggested path: {transition}."
-    )
-
-
 def generate_recommendations(profile):
-    user_skill_map = {}
 
-    # Step 1: Compute user skill scores
-    for s in profile.skills:
-        score = compute_skill_score(s.rating, s.projects)
-        user_skill_map[s.name.lower()] = score
+    # Step 1: Normalize input + scoring
+    user_skill_map = build_user_skill_map(profile, compute_skill_score)
 
     results = []
 
-    # Step 2: Evaluate roles
+    # Step 2: Evaluate each role
     for role, data in KB["roles"].items():
+
         role_skills = data["skills"]
         domain = data["domain"]
 
-        skill_score, matched, missing = match_skills(user_skill_map, role_skills)
+        # Matching
+        skill_score, matched = match_skills(user_skill_map, role_skills)
 
-        # Domain-aware weighting
+        # Skill gap
+        missing = get_skill_gap(user_skill_map, role_skills)
+
+        # Domain weights
         weights = get_domain_weights(domain)
 
+        # Education match
         education_score = check_education_match(profile.education, data["education"])
 
+        # Final score
         final_score = (
             (skill_score * weights["skill"]) +
             (education_score * weights["education"])
@@ -81,7 +74,7 @@ def generate_recommendations(profile):
             "missing_skills": missing
         })
 
-    # Step 3: Sort roles
+    # Step 3: Sort and pick best
     results.sort(key=lambda x: x["score"], reverse=True)
 
     best = results[0]
