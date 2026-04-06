@@ -1,0 +1,276 @@
+{
+  "domains": {
+    "Technology": {
+      "subdomains": ["Software Development", "Data Science", "Cybersecurity", "Cloud", "AI/ML"]
+    },
+    "Engineering": {
+      "subdomains": ["Mechanical", "Civil", "Electrical", "Electronics"]
+    },
+    "Medical": {
+      "subdomains": ["Doctor", "Nursing", "Pharmacy", "Allied Health"]
+    },
+    "Commerce": {
+      "subdomains": ["Finance", "Accounting", "Management", "Banking"]
+    },
+    "Arts": {
+      "subdomains": ["Design", "Media", "Literature", "Performing Arts"]
+    }
+  },
+
+  "roles": {
+
+    "Software Engineer": {
+      "domain": "Technology",
+      "subdomain": "Software Development",
+      "skills": {
+        "Java": 0.9,
+        "DSA": 0.9,
+        "System Design": 0.8,
+        "OOP": 0.8
+      },
+      "education": ["B.Tech CSE", "BCA"],
+      "min_projects": 2,
+      "difficulty": "medium"
+    },
+
+    "Backend Developer": {
+      "domain": "Technology",
+      "subdomain": "Software Development",
+      "skills": {
+        "Java": 0.9,
+        "Spring Boot": 0.9,
+        "SQL": 0.8,
+        "API Design": 0.8
+      },
+      "education": ["B.Tech", "BCA"],
+      "min_projects": 3,
+      "difficulty": "medium"
+    },
+
+    "Frontend Developer": {
+      "domain": "Technology",
+      "subdomain": "Software Development",
+      "skills": {
+        "JavaScript": 0.9,
+        "React": 0.9,
+        "HTML": 0.8,
+        "CSS": 0.8
+      },
+      "education": ["B.Tech", "BCA"],
+      "min_projects": 2,
+      "difficulty": "medium"
+    },
+
+    "Data Analyst": {
+      "domain": "Technology",
+      "subdomain": "Data Science",
+      "skills": {
+        "Python": 0.8,
+        "SQL": 0.9,
+        "Statistics": 0.8,
+        "Excel": 0.7
+      },
+      "education": ["B.Tech", "BSc"],
+      "min_projects": 2,
+      "difficulty": "medium"
+    },
+
+    "Data Scientist": {
+      "domain": "Technology",
+      "subdomain": "Data Science",
+      "skills": {
+        "Python": 0.9,
+        "Machine Learning": 0.9,
+        "Statistics": 0.8,
+        "Deep Learning": 0.7
+      },
+      "education": ["B.Tech", "MSc"],
+      "min_projects": 4,
+      "difficulty": "high"
+    },
+
+    "Cybersecurity Analyst": {
+      "domain": "Technology",
+      "subdomain": "Cybersecurity",
+      "skills": {
+        "Networking": 0.9,
+        "Security Concepts": 0.9,
+        "Linux": 0.8,
+        "Ethical Hacking": 0.8
+      },
+      "education": ["B.Tech", "Certifications"],
+      "min_projects": 2,
+      "difficulty": "high"
+    },
+
+    "Cloud Engineer": {
+      "domain": "Technology",
+      "subdomain": "Cloud",
+      "skills": {
+        "AWS": 0.9,
+        "Docker": 0.8,
+        "Kubernetes": 0.8,
+        "Linux": 0.8
+      },
+      "education": ["B.Tech"],
+      "min_projects": 2,
+      "difficulty": "high"
+    },
+
+    "Mechanical Engineer": {
+      "domain": "Engineering",
+      "subdomain": "Mechanical",
+      "skills": {
+        "Thermodynamics": 0.9,
+        "CAD": 0.8,
+        "Mathematics": 0.8
+      },
+      "education": ["B.Tech Mechanical"],
+      "min_projects": 1,
+      "difficulty": "medium"
+    },
+
+    "Civil Engineer": {
+      "domain": "Engineering",
+      "subdomain": "Civil",
+      "skills": {
+        "Structural Design": 0.9,
+        "AutoCAD": 0.8,
+        "Surveying": 0.8
+      },
+      "education": ["B.Tech Civil"],
+      "min_projects": 1,
+      "difficulty": "medium"
+    },
+
+    "Electrical Engineer": {
+      "domain": "Engineering",
+      "subdomain": "Electrical",
+      "skills": {
+        "Circuit Analysis": 0.9,
+        "Power Systems": 0.9,
+        "Mathematics": 0.8
+      },
+      "education": ["B.Tech Electrical"],
+      "min_projects": 1,
+      "difficulty": "medium"
+    },
+
+    "Doctor": {
+      "domain": "Medical",
+      "subdomain": "Doctor",
+      "skills": {
+        "Biology": 0.9,
+        "Diagnosis": 0.9,
+        "Patient Care": 0.9
+      },
+      "education": ["MBBS"],
+      "min_projects": 0,
+      "difficulty": "high"
+    },
+
+    "Nurse": {
+      "domain": "Medical",
+      "subdomain": "Nursing",
+      "skills": {
+        "Patient Care": 0.9,
+        "Medical Knowledge": 0.8,
+        "Communication": 0.8
+      },
+      "education": ["BSc Nursing"],
+      "min_projects": 0,
+      "difficulty": "medium"
+    },
+
+    "Pharmacist": {
+      "domain": "Medical",
+      "subdomain": "Pharmacy",
+      "skills": {
+        "Chemistry": 0.9,
+        "Drug Knowledge": 0.9,
+        "Attention to Detail": 0.8
+      },
+      "education": ["B.Pharm"],
+      "min_projects": 0,
+      "difficulty": "medium"
+    },
+
+    "Chartered Accountant": {
+      "domain": "Commerce",
+      "subdomain": "Accounting",
+      "skills": {
+        "Accounting": 0.9,
+        "Taxation": 0.9,
+        "Finance": 0.8
+      },
+      "education": ["CA", "B.Com"],
+      "min_projects": 0,
+      "difficulty": "high"
+    },
+
+    "Financial Analyst": {
+      "domain": "Commerce",
+      "subdomain": "Finance",
+      "skills": {
+        "Finance": 0.9,
+        "Excel": 0.9,
+        "Statistics": 0.8
+      },
+      "education": ["BBA", "MBA"],
+      "min_projects": 1,
+      "difficulty": "medium"
+    },
+
+    "Business Analyst": {
+      "domain": "Commerce",
+      "subdomain": "Management",
+      "skills": {
+        "Communication": 0.9,
+        "Analytics": 0.8,
+        "Problem Solving": 0.8
+      },
+      "education": ["MBA", "BBA"],
+      "min_projects": 1,
+      "difficulty": "medium"
+    },
+
+    "Graphic Designer": {
+      "domain": "Arts",
+      "subdomain": "Design",
+      "skills": {
+        "Creativity": 0.9,
+        "Photoshop": 0.9,
+        "UI Design": 0.8
+      },
+      "education": ["Any"],
+      "min_projects": 2,
+      "difficulty": "low"
+    },
+
+    "Content Writer": {
+      "domain": "Arts",
+      "subdomain": "Media",
+      "skills": {
+        "Writing": 0.9,
+        "Creativity": 0.8,
+        "SEO": 0.7
+      },
+      "education": ["Any"],
+      "min_projects": 1,
+      "difficulty": "low"
+    },
+
+    "Journalist": {
+      "domain": "Arts",
+      "subdomain": "Media",
+      "skills": {
+        "Communication": 0.9,
+        "Research": 0.9,
+        "Writing": 0.8
+      },
+      "education": ["BA Journalism"],
+      "min_projects": 1,
+      "difficulty": "medium"
+    }
+  }
+}
