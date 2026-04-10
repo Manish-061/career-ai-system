@@ -1,6 +1,11 @@
 import json
+from pathlib import Path
 
 
 def load_knowledge_base():
-    with open("app/data/knowledge_base.json") as f:
-        return json.load(f)
+    knowledge_base_path = (
+        Path(__file__).resolve().parent.parent / "data" / "knowledge_base.json"
+    )
+
+    with knowledge_base_path.open(encoding="utf-8") as file:
+        return json.load(file)

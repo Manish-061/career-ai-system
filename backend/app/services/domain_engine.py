@@ -1,15 +1,14 @@
 def get_domain_weights(domain):
     if domain == "Technology":
-        return {"skill": 0.6, "project": 0.3, "education": 0.1}
+        return {"skill": 0.45, "project": 0.2, "education": 0.1, "interest": 0.25}
 
-    elif domain == "Medical":
-        return {"skill": 0.2, "project": 0.1, "education": 0.7}
+    if domain == "Medical":
+        return {"skill": 0.2, "project": 0.1, "education": 0.55, "interest": 0.15}
 
-    elif domain == "Commerce":
-        return {"skill": 0.5, "project": 0.1, "education": 0.4}
+    if domain == "Commerce":
+        return {"skill": 0.4, "project": 0.15, "education": 0.25, "interest": 0.2}
 
-    elif domain == "Arts":
-        return {"skill": 0.4, "project": 0.5, "education": 0.1}
+    if domain == "Arts":
+        return {"skill": 0.3, "project": 0.3, "education": 0.1, "interest": 0.3}
 
-    else:
-        return {"skill": 0.5, "project": 0.3, "education": 0.2}
+    return {"skill": 0.4, "project": 0.2, "education": 0.2, "interest": 0.2}

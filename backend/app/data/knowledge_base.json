@@ -1,7 +1,15 @@
 {
   "domains": {
     "Technology": {
-      "subdomains": ["Software Development", "Data Science", "Cybersecurity", "Cloud", "AI/ML"]
+      "subdomains": [
+        "Software Development",
+        "Data Science",
+        "Cybersecurity",
+        "Cloud",
+        "AI/ML",
+        "DevOps",
+        "Quality Engineering"
+      ]
     },
     "Engineering": {
       "subdomains": ["Mechanical", "Civil", "Electrical", "Electronics"]
@@ -16,37 +24,69 @@
       "subdomains": ["Design", "Media", "Literature", "Performing Arts"]
     }
   },
-
+  "skill_aliases": {
+    "py": "Python",
+    "python programming": "Python",
+    "mysql": "SQL",
+    "postgresql": "SQL",
+    "postgres": "SQL",
+    "powerbi": "Power BI",
+    "machine learning": "Machine Learning",
+    "ml": "Machine Learning",
+    "deep learning": "Deep Learning",
+    "nlp": "Natural Language Processing",
+    "rest api": "API Design",
+    "apis": "API Design",
+    "node": "Node.js",
+    "nodejs": "Node.js",
+    "js": "JavaScript",
+    "ci/cd": "CI/CD",
+    "pipeline": "CI/CD",
+    "data viz": "Data Visualization",
+    "visualization": "Data Visualization",
+    "qa": "Testing"
+  },
   "roles": {
-
     "Software Engineer": {
       "domain": "Technology",
       "subdomain": "Software Development",
       "skills": {
-        "Java": 0.9,
-        "DSA": 0.9,
-        "System Design": 0.8,
-        "OOP": 0.8
+        "Java": 0.85,
+        "DSA": 0.95,
+        "OOP": 0.8,
+        "Git": 0.6,
+        "System Design": 0.65
       },
-      "education": ["B.Tech CSE", "BCA"],
+      "education": ["B.Tech CSE", "B.Tech", "BCA"],
       "min_projects": 2,
-      "difficulty": "medium"
+      "difficulty": "medium",
+      "interests": ["software engineering", "coding", "problem solving", "development"],
+      "related_roles": ["Backend Developer", "Full Stack Developer", "QA Engineer"],
+      "next_steps": [
+        "Build two end-to-end coding projects that show architecture, testing, and clean code.",
+        "Practice DSA and object-oriented design with interview-style problem sets."
+      ]
     },
-
     "Backend Developer": {
       "domain": "Technology",
       "subdomain": "Software Development",
       "skills": {
-        "Java": 0.9,
+        "Java": 0.75,
         "Spring Boot": 0.9,
-        "SQL": 0.8,
-        "API Design": 0.8
+        "SQL": 0.85,
+        "API Design": 0.85,
+        "Git": 0.55
       },
       "education": ["B.Tech", "BCA"],
-      "min_projects": 3,
-      "difficulty": "medium"
+      "min_projects": 2,
+      "difficulty": "medium",
+      "interests": ["backend", "apis", "server side", "web development"],
+      "related_roles": ["Software Engineer", "Python Developer", "Full Stack Developer"],
+      "next_steps": [
+        "Create backend APIs with authentication, validation, and database integration.",
+        "Learn database schema design and deployment basics for production-style services."
+      ]
     },
-
     "Frontend Developer": {
       "domain": "Technology",
       "subdomain": "Software Development",
@@ -54,41 +94,179 @@
         "JavaScript": 0.9,
         "React": 0.9,
         "HTML": 0.8,
-        "CSS": 0.8
+        "CSS": 0.8,
+        "UI Design": 0.55
       },
       "education": ["B.Tech", "BCA"],
       "min_projects": 2,
-      "difficulty": "medium"
+      "difficulty": "medium",
+      "interests": ["frontend", "web design", "user interface", "web development"],
+      "related_roles": ["Full Stack Developer", "Graphic Designer", "Software Engineer"],
+      "next_steps": [
+        "Build responsive interfaces with reusable components and polished states.",
+        "Practice consuming APIs and managing loading, error, and empty states."
+      ]
     },
-
+    "Full Stack Developer": {
+      "domain": "Technology",
+      "subdomain": "Software Development",
+      "skills": {
+        "JavaScript": 0.85,
+        "React": 0.8,
+        "Node.js": 0.85,
+        "SQL": 0.75,
+        "API Design": 0.75
+      },
+      "education": ["B.Tech", "BCA"],
+      "min_projects": 3,
+      "difficulty": "high",
+      "interests": ["full stack", "web applications", "product building"],
+      "related_roles": ["Frontend Developer", "Backend Developer", "Software Engineer"],
+      "next_steps": [
+        "Ship one complete application with frontend, backend, auth, and database layers.",
+        "Document your architecture decisions and deployment workflow."
+      ]
+    },
+    "Python Developer": {
+      "domain": "Technology",
+      "subdomain": "Software Development",
+      "skills": {
+        "Python": 0.95,
+        "OOP": 0.75,
+        "SQL": 0.65,
+        "API Design": 0.75,
+        "Git": 0.55
+      },
+      "education": ["B.Tech", "BCA", "BSc"],
+      "min_projects": 1,
+      "difficulty": "medium",
+      "interests": ["python", "automation", "backend", "scripting"],
+      "related_roles": ["Backend Developer", "Data Analyst", "QA Engineer"],
+      "next_steps": [
+        "Use Python in small real-world scripts, APIs, or data-processing workflows.",
+        "Add SQL and API fundamentals so Python becomes job-ready rather than theory-only."
+      ]
+    },
     "Data Analyst": {
       "domain": "Technology",
       "subdomain": "Data Science",
       "skills": {
-        "Python": 0.8,
+        "Python": 0.75,
         "SQL": 0.9,
         "Statistics": 0.8,
-        "Excel": 0.7
+        "Excel": 0.75,
+        "Data Visualization": 0.7
       },
-      "education": ["B.Tech", "BSc"],
+      "education": ["B.Tech", "BSc", "BCA"],
       "min_projects": 2,
-      "difficulty": "medium"
+      "difficulty": "medium",
+      "interests": ["data analyst", "data analysis", "analytics", "reporting", "dashboards", "business intelligence"],
+      "related_roles": ["Business Intelligence Analyst", "Product Analyst", "Data Engineer"],
+      "next_steps": [
+        "Build dashboard-driven case studies with clean SQL and business storytelling.",
+        "Practice turning raw datasets into insights, KPIs, and actionable summaries."
+      ]
     },
-
-    "Data Scientist": {
+    "Business Intelligence Analyst": {
       "domain": "Technology",
       "subdomain": "Data Science",
       "skills": {
-        "Python": 0.9,
-        "Machine Learning": 0.9,
+        "SQL": 0.9,
+        "Power BI": 0.95,
+        "Excel": 0.8,
+        "Data Visualization": 0.85,
+        "Statistics": 0.65
+      },
+      "education": ["B.Tech", "BSc", "BBA"],
+      "min_projects": 2,
+      "difficulty": "medium",
+      "interests": ["business intelligence", "reporting", "dashboards", "analytics"],
+      "related_roles": ["Data Analyst", "Financial Analyst", "Product Analyst"],
+      "next_steps": [
+        "Create interactive dashboards that explain trends, anomalies, and business outcomes.",
+        "Pair BI tools with strong SQL to answer stakeholder questions independently."
+      ]
+    },
+    "Product Analyst": {
+      "domain": "Technology",
+      "subdomain": "Data Science",
+      "skills": {
+        "SQL": 0.9,
         "Statistics": 0.8,
-        "Deep Learning": 0.7
+        "Excel": 0.7,
+        "Experimentation": 0.85,
+        "Python": 0.6
+      },
+      "education": ["B.Tech", "BSc", "BBA"],
+      "min_projects": 2,
+      "difficulty": "medium",
+      "interests": ["product analytics", "experiments", "user behavior", "analytics"],
+      "related_roles": ["Data Analyst", "Business Analyst", "Business Intelligence Analyst"],
+      "next_steps": [
+        "Study funnels, retention, experimentation, and product KPI frameworks.",
+        "Analyze user behavior datasets and communicate trade-offs to product teams."
+      ]
+    },
+    "Data Engineer": {
+      "domain": "Technology",
+      "subdomain": "Data Science",
+      "skills": {
+        "Python": 0.8,
+        "SQL": 0.95,
+        "ETL": 0.9,
+        "Data Warehousing": 0.85,
+        "Spark": 0.8
+      },
+      "education": ["B.Tech", "BSc"],
+      "min_projects": 3,
+      "difficulty": "high",
+      "interests": ["data engineering", "pipelines", "big data", "analytics engineering"],
+      "related_roles": ["Data Analyst", "Machine Learning Engineer", "Backend Developer"],
+      "next_steps": [
+        "Build data pipelines that clean, transform, and load raw datasets into analytics tables.",
+        "Learn warehouse modeling and batch processing before tackling larger scale systems."
+      ]
+    },
+    "Data Scientist": {
+      "domain": "Technology",
+      "subdomain": "AI/ML",
+      "skills": {
+        "Python": 0.9,
+        "Machine Learning": 0.95,
+        "Statistics": 0.85,
+        "SQL": 0.65,
+        "Data Visualization": 0.6
       },
       "education": ["B.Tech", "MSc"],
-      "min_projects": 4,
-      "difficulty": "high"
+      "min_projects": 3,
+      "difficulty": "high",
+      "interests": ["data science", "machine learning", "predictive modeling", "analytics"],
+      "related_roles": ["Data Analyst", "Machine Learning Engineer", "Data Engineer"],
+      "next_steps": [
+        "Complete supervised learning projects with business framing, evaluation, and presentation.",
+        "Pair modeling with strong statistics and SQL so insights remain practical."
+      ]
     },
-
+    "Machine Learning Engineer": {
+      "domain": "Technology",
+      "subdomain": "AI/ML",
+      "skills": {
+        "Python": 0.9,
+        "Machine Learning": 0.95,
+        "MLOps": 0.8,
+        "SQL": 0.65,
+        "Docker": 0.6
+      },
+      "education": ["B.Tech", "MSc"],
+      "min_projects": 3,
+      "difficulty": "high",
+      "interests": ["machine learning", "ai", "model deployment", "automation"],
+      "related_roles": ["Data Scientist", "Data Engineer", "Python Developer"],
+      "next_steps": [
+        "Deploy models behind APIs and track reproducibility, versioning, and monitoring.",
+        "Strengthen both modeling depth and software engineering discipline."
+      ]
+    },
     "Cybersecurity Analyst": {
       "domain": "Technology",
       "subdomain": "Cybersecurity",
@@ -96,13 +274,19 @@
         "Networking": 0.9,
         "Security Concepts": 0.9,
         "Linux": 0.8,
-        "Ethical Hacking": 0.8
+        "Ethical Hacking": 0.75,
+        "Python": 0.45
       },
       "education": ["B.Tech", "Certifications"],
       "min_projects": 2,
-      "difficulty": "high"
+      "difficulty": "high",
+      "interests": ["cybersecurity", "security", "ethical hacking", "network defense"],
+      "related_roles": ["Cloud Engineer", "DevOps Engineer", "QA Engineer"],
+      "next_steps": [
+        "Build labs around Linux, networking, and common security tooling.",
+        "Document security assessments or capture-the-flag style exercises in your portfolio."
+      ]
     },
-
     "Cloud Engineer": {
       "domain": "Technology",
       "subdomain": "Cloud",
@@ -110,13 +294,59 @@
         "AWS": 0.9,
         "Docker": 0.8,
         "Kubernetes": 0.8,
-        "Linux": 0.8
+        "Linux": 0.8,
+        "CI/CD": 0.65
       },
       "education": ["B.Tech"],
       "min_projects": 2,
-      "difficulty": "high"
+      "difficulty": "high",
+      "interests": ["cloud", "infrastructure", "deployment", "platform engineering"],
+      "related_roles": ["DevOps Engineer", "Backend Developer", "Cybersecurity Analyst"],
+      "next_steps": [
+        "Deploy one production-style app on cloud infrastructure with observability and rollback plans.",
+        "Learn containerization and infrastructure workflows before advanced orchestration."
+      ]
     },
-
+    "DevOps Engineer": {
+      "domain": "Technology",
+      "subdomain": "DevOps",
+      "skills": {
+        "Linux": 0.85,
+        "Docker": 0.85,
+        "CI/CD": 0.85,
+        "AWS": 0.75,
+        "Kubernetes": 0.8
+      },
+      "education": ["B.Tech", "BCA"],
+      "min_projects": 2,
+      "difficulty": "high",
+      "interests": ["devops", "automation", "deployment", "infrastructure"],
+      "related_roles": ["Cloud Engineer", "Backend Developer", "Site Reliability Engineer"],
+      "next_steps": [
+        "Automate build, test, and deployment workflows for a multi-service application.",
+        "Use Linux, containers, and monitoring together so your automation work is production-aware."
+      ]
+    },
+    "QA Engineer": {
+      "domain": "Technology",
+      "subdomain": "Quality Engineering",
+      "skills": {
+        "Testing": 0.9,
+        "Automation": 0.8,
+        "Selenium": 0.75,
+        "API Testing": 0.7,
+        "SQL": 0.5
+      },
+      "education": ["B.Tech", "BCA", "BSc"],
+      "min_projects": 1,
+      "difficulty": "medium",
+      "interests": ["quality assurance", "testing", "automation", "software quality"],
+      "related_roles": ["Software Engineer", "Backend Developer", "Frontend Developer"],
+      "next_steps": [
+        "Write repeatable test cases and automate them against a working application.",
+        "Add API and regression coverage to show quality ownership, not just manual testing."
+      ]
+    },
     "Mechanical Engineer": {
       "domain": "Engineering",
       "subdomain": "Mechanical",
@@ -127,9 +357,9 @@
       },
       "education": ["B.Tech Mechanical"],
       "min_projects": 1,
-      "difficulty": "medium"
+      "difficulty": "medium",
+      "interests": ["mechanical engineering", "manufacturing", "design"]
     },
-
     "Civil Engineer": {
       "domain": "Engineering",
       "subdomain": "Civil",
@@ -140,9 +370,9 @@
       },
       "education": ["B.Tech Civil"],
       "min_projects": 1,
-      "difficulty": "medium"
+      "difficulty": "medium",
+      "interests": ["civil engineering", "construction", "infrastructure"]
     },
-
     "Electrical Engineer": {
       "domain": "Engineering",
       "subdomain": "Electrical",
@@ -153,9 +383,9 @@
       },
       "education": ["B.Tech Electrical"],
       "min_projects": 1,
-      "difficulty": "medium"
+      "difficulty": "medium",
+      "interests": ["electrical engineering", "power systems", "circuits"]
     },
-
     "Doctor": {
       "domain": "Medical",
       "subdomain": "Doctor",
@@ -166,9 +396,9 @@
       },
       "education": ["MBBS"],
       "min_projects": 0,
-      "difficulty": "high"
+      "difficulty": "high",
+      "interests": ["medicine", "doctor", "patient care"]
     },
-
     "Nurse": {
       "domain": "Medical",
       "subdomain": "Nursing",
@@ -179,9 +409,9 @@
       },
       "education": ["BSc Nursing"],
       "min_projects": 0,
-      "difficulty": "medium"
+      "difficulty": "medium",
+      "interests": ["nursing", "patient care", "healthcare"]
     },
-
     "Pharmacist": {
       "domain": "Medical",
       "subdomain": "Pharmacy",
@@ -192,9 +422,9 @@
       },
       "education": ["B.Pharm"],
       "min_projects": 0,
-      "difficulty": "medium"
+      "difficulty": "medium",
+      "interests": ["pharmacy", "medicines", "healthcare"]
     },
-
     "Chartered Accountant": {
       "domain": "Commerce",
       "subdomain": "Accounting",
@@ -205,9 +435,9 @@
       },
       "education": ["CA", "B.Com"],
       "min_projects": 0,
-      "difficulty": "high"
+      "difficulty": "high",
+      "interests": ["accounting", "taxation", "finance"]
     },
-
     "Financial Analyst": {
       "domain": "Commerce",
       "subdomain": "Finance",
@@ -216,11 +446,11 @@
         "Excel": 0.9,
         "Statistics": 0.8
       },
-      "education": ["BBA", "MBA"],
+      "education": ["BBA", "MBA", "B.Com"],
       "min_projects": 1,
-      "difficulty": "medium"
+      "difficulty": "medium",
+      "interests": ["finance", "financial analysis", "investment"]
     },
-
     "Business Analyst": {
       "domain": "Commerce",
       "subdomain": "Management",
@@ -229,11 +459,11 @@
         "Analytics": 0.8,
         "Problem Solving": 0.8
       },
-      "education": ["MBA", "BBA"],
+      "education": ["MBA", "BBA", "B.Com"],
       "min_projects": 1,
-      "difficulty": "medium"
+      "difficulty": "medium",
+      "interests": ["business analysis", "operations", "stakeholder management"]
     },
-
     "Graphic Designer": {
       "domain": "Arts",
       "subdomain": "Design",
@@ -244,9 +474,9 @@
       },
       "education": ["Any"],
       "min_projects": 2,
-      "difficulty": "low"
+      "difficulty": "low",
+      "interests": ["design", "branding", "visual communication"]
     },
-
     "Content Writer": {
       "domain": "Arts",
       "subdomain": "Media",
@@ -257,9 +487,9 @@
       },
       "education": ["Any"],
       "min_projects": 1,
-      "difficulty": "low"
+      "difficulty": "low",
+      "interests": ["content writing", "writing", "media"]
     },
-
     "Journalist": {
       "domain": "Arts",
       "subdomain": "Media",
@@ -270,7 +500,8 @@
       },
       "education": ["BA Journalism"],
       "min_projects": 1,
-      "difficulty": "medium"
+      "difficulty": "medium",
+      "interests": ["journalism", "media", "storytelling"]
     }
   }
 }
