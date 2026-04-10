@@ -1,8 +1,39 @@
-export default function Loader() {
+import { useState, useEffect } from "react"
+
+const STAGES = [
+  "Analyzing profile",
+  "Matching roles",
+  "Building guidance",
+]
+
+/**
+ * Multi-stage loader that cycles through descriptive messages
+ * to indicate meaningful progress to the user.
+ */
+export default function Loader({ message, stages = STAGES }) {
+  const [stageIndex, setStageIndex] = useState(0)
+
+  useEffect(() => {
+    if (!stages?.length) return
+    const timer = setInterval(() => {
+      setStageIndex((prev) => (prev + 1) % stages.length)
+    }, 2200)
+    return () => clearInterval(timer)
+  }, [stages])
+
+  const displayMessage = message || stages[stageIndex]
+
   return (
-    <div className="flex items-center justify-center gap-3 rounded-2xl border border-cyan-100 bg-cyan-50/70 px-4 py-3 text-sm font-medium text-cyan-900">
-      <div className="h-4 w-4 animate-spin rounded-full border-2 border-cyan-200 border-t-cyan-600" />
-      Running the recommendation engine...
+    <div className="loader-container" role="status" aria-live="polite">
+      <div className="loader-spinner" aria-hidden="true" />
+      <span className="loader-text">
+        {displayMessage}
+        <span className="loader-dots" aria-hidden="true">
+          <span className="loader-dot" />
+          <span className="loader-dot" />
+          <span className="loader-dot" />
+        </span>
+      </span>
     </div>
   )
 }

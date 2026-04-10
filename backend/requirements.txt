@@ -3,3 +3,4 @@ uvicorn
 pydantic
 python-dotenv
 numpy
+google-genai
