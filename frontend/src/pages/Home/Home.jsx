@@ -22,7 +22,7 @@ export default function Home() {
               Build a clear career path with AI-powered insights.
             </h2>
             <p className="animate-fade-in-up delay-2 mx-auto mt-6 max-w-2xl text-base leading-8 text-slate-300 sm:text-lg">
-              Use structured input for precision, or let Gemini interpret your profile.
+              Use structured input for precision, or let AI interpret your profile.
               The recommendation engine scores the fit, and the AI layer helps you
               explore the next move with less friction.
             </p>
@@ -33,7 +33,7 @@ export default function Home() {
                 onClick={() => navigate("/assess")}
                 className="!px-8 !py-3.5 !text-base"
               >
-                Start Assessment
+                Get Started
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                   <line x1="5" y1="12" x2="19" y2="12" />
                   <polyline points="12 5 19 12 12 19" />
@@ -104,7 +104,7 @@ export default function Home() {
         {/* ── CTA Banner ── */}
         <div className="mt-8 glass-panel rounded-[32px] p-8 sm:p-10 text-center animate-fade-in-up delay-4">
           <h3 className="text-2xl font-bold text-white sm:text-3xl">
-            Ready to discover your ideal career path?
+            Ready to find your ideal career path?
           </h3>
           <p className="mx-auto mt-3 max-w-xl text-sm leading-7 text-slate-300">
             Get a personalized recommendation based on your skills, education, and interests —
@@ -115,7 +115,7 @@ export default function Home() {
             onClick={() => navigate("/assess")}
             className="mt-6 !px-8 !py-3.5 !text-base"
           >
-            Start Your Free Assessment
+            Get Started
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
               <line x1="5" y1="12" x2="19" y2="12" />
               <polyline points="12 5 19 12 12 19" />
@@ -130,11 +130,11 @@ export default function Home() {
 const STEPS = [
   {
     title: "Profile Input",
-    copy: "Enter your education, interests, and skills using structured fields — or describe your background in natural language and let Gemini handle the rest.",
+    copy: "Enter your education, interests, and skills using structured fields — or describe your background in natural language and let AI handle the rest.",
   },
   {
     title: "Hybrid Reasoning",
-    copy: "A rule-based engine scores the fit, while Gemini supports intelligent parsing and provides deeper career guidance.",
+    copy: "A rule-based engine scores the fit, while AI supports intelligent parsing and provides deeper career guidance.",
   },
   {
     title: "Interactive Output",
@@ -173,8 +173,8 @@ const FEATURES = [
     ),
   },
   {
-    title: "Gemini-Powered Guidance",
-    desc: "Get confidence summaries, clarification questions, and AI-generated explanations powered by Google's Gemini model.",
+    title: "AI-Powered Guidance",
+    desc: "Get confidence summaries, clarification questions, and AI-generated explanations powered by AI.",
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
         <circle cx="12" cy="12" r="10" />

@@ -34,9 +34,8 @@ export default function Navbar() {
   return (
     <header className="relative z-20 mx-auto max-w-7xl px-4 pt-5 sm:px-6 lg:px-8">
       <nav
-        className={`glass-panel flex items-center justify-between gap-4 rounded-[28px] px-5 py-4 sm:px-6 transition-all duration-300 ${
-          scrolled ? "shadow-2xl" : ""
-        }`}
+        className={`glass-panel flex items-center justify-between gap-4 rounded-[28px] px-5 py-4 sm:px-6 transition-all duration-300 ${scrolled ? "shadow-2xl" : ""
+          }`}
         aria-label="Main navigation"
       >
         {/* ── Logo ── */}
@@ -108,7 +107,7 @@ export default function Navbar() {
               onClick={goAssess}
               className="inline-flex items-center gap-2 rounded-full border border-cyan-400/30 bg-gradient-to-r from-cyan-500/20 to-blue-500/15 px-5 py-2.5 text-sm font-semibold text-cyan-50 transition-all duration-200 hover:from-cyan-500/30 hover:to-blue-500/25 hover:shadow-lg hover:shadow-cyan-500/15 focus-visible:outline-2 focus-visible:outline-cyan-400 focus-visible:outline-offset-2"
             >
-              Start Assessment
+              Get Started
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
                 <line x1="5" y1="12" x2="19" y2="12" />
                 <polyline points="12 5 19 12 12 19" />
@@ -179,11 +178,10 @@ function MobileNavItem({ children, onClick, active }) {
     <button
       type="button"
       onClick={onClick}
-      className={`w-full rounded-xl px-4 py-3 text-left text-sm font-medium transition ${
-        active
+      className={`w-full rounded-xl px-4 py-3 text-left text-sm font-medium transition ${active
           ? "bg-cyan-500/15 text-cyan-200"
           : "text-slate-300 hover:bg-white/5 hover:text-white"
-      }`}
+        }`}
     >
       {children}
     </button>

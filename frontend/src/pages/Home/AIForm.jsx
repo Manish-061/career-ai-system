@@ -17,7 +17,7 @@ export default function AIForm({ freeTextProfile, setFreeTextProfile }) {
             </svg>
           </div>
           <p className="text-sm leading-6 text-cyan-950">
-            Gemini will extract skills, interests, education, and likely gaps
+            AI will extract skills, interests, education, and likely gaps
             from your description. If the live model is temporarily unavailable,
             the backup parser will still structure the profile as far as possible.
           </p>

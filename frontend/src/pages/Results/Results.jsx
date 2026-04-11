@@ -3,6 +3,7 @@ import { useCareer } from "../../context/CareerContext"
 import OverviewSection from "./OverviewSection"
 import ExplanationSection from "./ExplanationSection"
 import GrowthSection from "./GrowthSection"
+import AIGuidanceSection from "./AIGuidanceSection"
 import EmptyState from "../../components/ui/EmptyState"
 import Button from "../../components/ui/Button"
 import PageTransition from "../../components/ui/PageTransition"
@@ -10,10 +11,24 @@ import { useState, useEffect } from "react"
 
 export default function Results() {
   const navigate = useNavigate()
-  const { profile, result, aiAssistance, aiWarning } = useCareer()
+  const { profile, result, aiAssistance, aiWarning, setGenerationState } = useCareer()
   const [activeSection, setActiveSection] = useState("")
 
   const goHome = () => navigate("/")
+
+  const handleOpenWorkspace = () => {
+    setGenerationState({
+      action: "roadmap",
+      prompt: "Create a 30-day roadmap tailored to my current recommendation, missing skills, and readiness level.",
+      title: "Multi-Day Roadmap",
+      content: "",
+      suggestions: [],
+      model: "",
+      warning: null,
+      autoGenerate: true,
+    })
+    navigate("/generate")
+  }
 
   // Scroll-spy: highlight the currently visible section in the nav bar
   useEffect(() => {
@@ -79,7 +94,7 @@ export default function Results() {
 
         {/* Sticky Navigation */}
         <nav
-          className="soft-panel result-nav-panel rounded-[28px] px-4 py-3 sm:px-5"
+          className="soft-panel result-nav-panel rounded-[28px] px-4 py-3 sm:px-5 flex flex-wrap items-center justify-between gap-4"
           aria-label="Results section navigation"
         >
           <div className="flex flex-wrap items-center gap-2">
@@ -105,6 +120,19 @@ export default function Results() {
               Growth Plan
             </NavLink>
           </div>
+          
+          <Button
+            variant="primary"
+            size="compact"
+            onClick={handleOpenWorkspace}
+            className="flex-shrink-0"
+          >
+            Open Workspace
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+              <line x1="5" y1="12" x2="19" y2="12" />
+              <polyline points="12 5 19 12 12 19" />
+            </svg>
+          </Button>
         </nav>
 
         {/* Content Sections */}
@@ -115,8 +143,9 @@ export default function Results() {
             aiAssistance={aiAssistance}
             aiWarning={aiWarning}
           />
-          <ExplanationSection data={result} aiAssistance={aiAssistance} />
+          <ExplanationSection data={result} />
           <GrowthSection data={result} onNavigateHome={goHome} />
+          <AIGuidanceSection aiAssistance={aiAssistance} />
         </div>
       </section>
     </PageTransition>

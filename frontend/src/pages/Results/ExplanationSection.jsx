@@ -1,14 +1,18 @@
 const formatScore = (score) => Number(score ?? 0).toFixed(2)
 
-const getExplanationPoints = (explanation) =>
-  explanation
-    .split(".")
+const getExplanationPoints = (explanation) => {
+  if (!explanation || typeof explanation !== "string") return []
+  return explanation
+    .trim()
+    .replace(/\.$/, "") // Remove the very last period to prevent double periods
+    .split(/\.\s+/) // Split on period followed by one or more spaces
     .map((sentence) => sentence.trim())
     .filter(Boolean)
-    .map((sentence) => `${sentence}.`)
+    .map((sentence) => `${sentence}.`) // Add periods back
+}
 
 export default function ExplanationSection({ data, aiAssistance }) {
-  const explanationPoints = getExplanationPoints(data.explanation)
+  const explanationPoints = getExplanationPoints(data?.explanation)
 
   return (
     <article
@@ -47,26 +51,6 @@ export default function ExplanationSection({ data, aiAssistance }) {
         ))}
       </div>
 
-      {aiAssistance ? (
-        <div className="mt-5 rounded-[22px] border border-cyan-200 bg-cyan-50/70 p-5 animate-fade-in delay-4">
-          <div className="flex items-center justify-between gap-4">
-            <span className="flex items-center gap-2 text-xs font-medium uppercase tracking-[0.2em] text-cyan-700">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                <path d="M12 2a10 10 0 1 0 10 10" />
-                <path d="M12 6v6l4 2" />
-              </svg>
-              AI Guidance Summary
-            </span>
-            <span className="text-sm font-semibold tabular-nums text-cyan-900">
-              Confidence {formatScore(aiAssistance.parse_confidence)}
-            </span>
-          </div>
-
-          <p className="mt-3 text-sm leading-7 text-slate-600">
-            {aiAssistance.summary}
-          </p>
-        </div>
-      ) : null}
     </article>
   )
 }

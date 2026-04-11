@@ -56,7 +56,7 @@ export default function ProfileForm({ initialProfile, onSubmit, loading, error, 
               Candidate Details
             </p>
             <h3 className="mt-1.5 text-[1.85rem] font-semibold tracking-tight text-slate-950 sm:text-[2.1rem]">
-              Build your recommendation
+              Build your career path
             </h3>
           </div>
 
@@ -73,7 +73,7 @@ export default function ProfileForm({ initialProfile, onSubmit, loading, error, 
               onClick={() => setInputMode("ai")}
               className={modeButtonClass(inputMode === "ai")}
             >
-              Gemini Assist
+              AI Assist
             </button>
           </div>
         </div>
@@ -117,7 +117,7 @@ export default function ProfileForm({ initialProfile, onSubmit, loading, error, 
                 : "Structuring Profile..."
               : inputMode === "manual"
                 ? "Get Recommendation"
-                : "Generate with Gemini"}
+                : "Generate with AI"}
           </Button>
 
           {loading ? (
@@ -129,11 +129,6 @@ export default function ProfileForm({ initialProfile, onSubmit, loading, error, 
               }
             />
           ) : null}
-
-          <p className="text-xs leading-6 text-slate-400">
-            Manual mode uses the same hybrid delivery model: structured input goes
-            through the recommendation engine first, and Gemini adds guidance when available.
-          </p>
         </div>
       </div>
     </div>
