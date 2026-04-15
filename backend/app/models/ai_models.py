@@ -39,12 +39,12 @@ class StructuredRecommendationResponse(BaseModel):
     ai_warning: str | None = None
 
 
-GenerationAction = Literal["roadmap", "project_ideas", "career_alternatives"]
+GenerationAction = Literal["roadmap", "project_ideas", "career_alternatives", "chat"]
 
 
 class GenerationRequest(BaseModel):
-    action: GenerationAction
-    prompt: str = Field(..., min_length=8)
+    action: GenerationAction = "chat"
+    prompt: str = Field(..., min_length=2)
     profile: UserProfile
     recommendation: Recommendation
     existing_output: str = ""

@@ -6,7 +6,7 @@ export default function AIGuidanceSection({ aiAssistance }) {
   return (
     <article
       id="recommendation-ai-guidance"
-      className="result-card animate-fade-in-up delay-3 scroll-mt-32"
+      className="result-card xl:col-span-2 animate-fade-in-up delay-3 scroll-mt-32"
     >
       <div className="flex items-center justify-between gap-3">
         <span className="section-pill">
@@ -15,9 +15,6 @@ export default function AIGuidanceSection({ aiAssistance }) {
             <path d="M12 6v6l4 2" />
           </svg>
           AI Guidance Summary
-        </span>
-        <span className="text-sm font-semibold tabular-nums text-cyan-600">
-          Confidence {formatScore(aiAssistance.parse_confidence)}
         </span>
       </div>
 

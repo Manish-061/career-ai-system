@@ -21,11 +21,11 @@ export default function Results() {
       action: "roadmap",
       prompt: "Create a 30-day roadmap tailored to my current recommendation, missing skills, and readiness level.",
       title: "Multi-Day Roadmap",
-      content: "",
+      messages: [],
       suggestions: [],
       model: "",
       warning: null,
-      autoGenerate: true,
+      autoGenerate: false,
     })
     navigate("/generate")
   }

@@ -23,6 +23,7 @@ ACTION_LABELS = {
     "roadmap": "Multi-Day Roadmap",
     "project_ideas": "Project Ideas",
     "career_alternatives": "Career Alternatives",
+    "chat": "Career Chat",
 }
 
 ACTION_INSTRUCTIONS = {
@@ -37,6 +38,13 @@ ACTION_INSTRUCTIONS = {
     "career_alternatives": (
         "Suggest realistic nearby career alternatives. For each one, explain why it fits, what gaps remain, "
         "and how it compares with the primary recommendation."
+    ),
+    "chat": (
+        "You are a conversational AI career assistant. Answer the user's question or request "
+        "thoroughly and helpfully. You can discuss anything career-related: interview tips, "
+        "resume advice, skill development strategies, industry insights, salary negotiation, "
+        "job search tactics, networking advice, or anything else the user asks about. "
+        "Keep responses practical, actionable, and tailored to the user's profile and recommendation."
     ),
 }
 
@@ -55,6 +63,11 @@ FALLBACK_SUGGESTIONS = {
         "Ask for safer entry-level options.",
         "Request alternatives closer to your strongest skills.",
         "Ask for alternatives with faster portfolio readiness.",
+    ],
+    "chat": [
+        "What skills should I focus on next?",
+        "How can I improve my resume?",
+        "What are common interview questions for my target role?",
     ],
 }
 
@@ -100,11 +113,22 @@ def _fallback_content(action: GenerationAction, prompt: str, recommendation: dic
             ]
         )
 
+    if action == "career_alternatives":
+        return "\n".join(
+            [
+                f"Primary recommendation remains {role}. Nearby alternatives include {', '.join(alternatives) if alternatives else 'roles close to your current strengths'}.",
+                "For each alternative, compare three things: entry barrier, missing skills, and how quickly you can build proof of work.",
+                "Choose the alternative that reduces your biggest gap while still keeping you close to your long-term target.",
+                f"Prompt focus: {prompt}",
+            ]
+        )
+
+    # chat (open-ended fallback)
     return "\n".join(
         [
-            f"Primary recommendation remains {role}. Nearby alternatives include {', '.join(alternatives) if alternatives else 'roles close to your current strengths'}.",
-            "For each alternative, compare three things: entry barrier, missing skills, and how quickly you can build proof of work.",
-            "Choose the alternative that reduces your biggest gap while still keeping you close to your long-term target.",
+            f"Based on your profile and recommendation for {role}:",
+            f"Your strongest matched skills are solid, but consider closing gaps in: {', '.join(gaps) if gaps else 'advanced areas for the role'}.",
+            f"Key next steps: {'; '.join(next_steps[:3]) if next_steps else 'Build a focused portfolio project and refine your resume.'}.",
             f"Prompt focus: {prompt}",
         ]
     )

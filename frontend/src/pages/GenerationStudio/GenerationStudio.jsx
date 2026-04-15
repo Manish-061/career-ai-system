@@ -1,67 +1,88 @@
-import { useEffect, useState, useCallback } from "react"
+import { useState, useCallback, useRef, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { useCareer } from "../../context/CareerContext"
 import { generateInteractiveContent } from "../../services/api"
-import Loader from "../../components/Loader"
 import Button from "../../components/ui/Button"
-import Textarea from "../../components/ui/Textarea"
 import ErrorBanner from "../../components/ui/ErrorBanner"
 import EmptyState from "../../components/ui/EmptyState"
 import PageTransition from "../../components/ui/PageTransition"
+import MarkdownRenderer from "../../components/ui/MarkdownRenderer"
 
-const ACTIONS = {
-  roadmap: {
-    title: "Multi-Day Roadmap",
-    description:
-      "Create a structured study and execution plan tailored to the current recommendation.",
+const EXAMPLE_PROMPTS = [
+  {
     icon: (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
         <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
         <line x1="16" y1="2" x2="16" y2="6" />
         <line x1="8" y1="2" x2="8" y2="6" />
         <line x1="3" y1="10" x2="21" y2="10" />
       </svg>
     ),
-    starter:
-      "Create a 30-day roadmap tailored to my current recommendation, missing skills, and readiness level.",
+    label: "Build a 30-day roadmap",
+    prompt: "Create a 30-day roadmap tailored to my current recommendation, missing skills, and readiness level.",
   },
-  project_ideas: {
-    title: "Project Ideas",
-    description:
-      "Generate portfolio-ready project ideas that prove role fit and close skill gaps.",
+  {
     icon: (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
         <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
         <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
       </svg>
     ),
-    starter:
-      "Generate portfolio-ready project ideas that close my biggest skill gaps for this recommendation.",
+    label: "Portfolio project ideas",
+    prompt: "Generate portfolio-ready project ideas that close my biggest skill gaps for this recommendation.",
   },
-  career_alternatives: {
-    title: "Career Alternatives",
-    description:
-      "Explore nearby roles and understand the trade-offs before committing to one path.",
+  {
     icon: (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
         <circle cx="12" cy="12" r="10" />
         <path d="M16 12a4 4 0 1 0-8 0" />
       </svg>
     ),
-    starter:
-      "Show nearby career alternatives that still fit my strengths and explain how they compare with the main recommendation.",
+    label: "Explore career alternatives",
+    prompt: "Show nearby career alternatives that still fit my strengths and explain how they compare with the main recommendation.",
   },
-}
+  {
+    icon: (
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+        <polyline points="14 2 14 8 20 8" />
+        <line x1="16" y1="13" x2="8" y2="13" />
+        <line x1="16" y1="17" x2="8" y2="17" />
+      </svg>
+    ),
+    label: "Resume tips for my role",
+    prompt: "Give me specific resume tips and bullet point examples tailored to my target role and current skills.",
+  },
+  {
+    icon: (
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+      </svg>
+    ),
+    label: "Interview prep questions",
+    prompt: "What are the most common interview questions for my target role, and how should I answer them based on my experience?",
+  },
+  {
+    icon: (
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+        <polyline points="17 6 23 6 23 12" />
+      </svg>
+    ),
+    label: "Skill gap analysis",
+    prompt: "Analyze my skill gaps in detail and rank them by priority. Suggest the fastest way to close each one.",
+  },
+]
 
-const createGenerationState = (action) => ({
-  action,
-  prompt: ACTIONS[action].starter,
-  title: ACTIONS[action].title,
-  content: "",
+const createFreshState = () => ({
+  action: "chat",
+  prompt: "",
+  title: "Career Chat",
+  messages: [],
   suggestions: [],
   model: "",
   warning: null,
-  autoGenerate: true,
+  autoGenerate: false,
 })
 
 export default function GenerationStudio() {
@@ -69,80 +90,75 @@ export default function GenerationStudio() {
   const { profile, result, generationState, setGenerationState } = useCareer()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
+  const [chatInput, setChatInput] = useState("")
+  const chatEndRef = useRef(null)
+  const textareaRef = useRef(null)
 
-  const currentState = generationState || createGenerationState("roadmap")
-  const currentAction = currentState.action || "roadmap"
+  const currentState = generationState || createFreshState()
+  const messages = currentState.messages || []
 
   const clearError = useCallback(() => setError(""), [])
 
-  useEffect(() => {
-    if (!profile || !result) return
-    if (!currentState.autoGenerate) return
-
-    const run = async () => {
-      try {
-        setLoading(true)
-        setError("")
-
-        const response = await generateInteractiveContent({
-          action: currentAction,
-          prompt: currentState.prompt,
-          profile,
-          recommendation: result,
-          existingOutput: currentState.content,
-        })
-
-        setGenerationState({
-          ...currentState,
-          title: response.title,
-          content: response.content,
-          suggestions: response.suggestions,
-          model: response.model,
-          warning: response.warning,
-          autoGenerate: false,
-        })
-      } catch (err) {
-        setError(err.message || "Unable to generate content right now.")
-        setGenerationState({
-          ...currentState,
-          autoGenerate: false,
-        })
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    run()
-  }, [
-    currentAction,
-    currentState,
-    setGenerationState,
-    profile,
-    result,
-  ])
-
-  const handleChangeAction = (action) => {
-    setGenerationState(createGenerationState(action))
+  const scrollToBottom = () => {
+    chatEndRef.current?.scrollIntoView({ behavior: "smooth" })
   }
 
-  const handleGenerate = async (nextPrompt = currentState.prompt) => {
+  useEffect(() => {
+    scrollToBottom()
+  }, [messages, loading])
+
+  // Auto-resize textarea
+  useEffect(() => {
+    const el = textareaRef.current
+    if (el) {
+      el.style.height = "auto"
+      el.style.height = Math.min(el.scrollHeight, 192) + "px"
+    }
+  }, [chatInput])
+
+  const goResult = () => navigate("/result")
+
+  const handleNewChat = () => {
+    setGenerationState(createFreshState())
+    setChatInput("")
+    setError("")
+  }
+
+  const handleGenerate = async (promptText) => {
+    if (!promptText.trim() || loading) return
+
     try {
       setLoading(true)
       setError("")
+      setChatInput("")
+
+      const newMessages = [...messages, { role: "user", content: promptText }]
+      setGenerationState({
+        ...currentState,
+        messages: newMessages,
+      })
+
+      // Build conversation history for context
+      const conversationContext = messages
+        .map((m) => `${m.role.toUpperCase()}: ${m.content}`)
+        .join("\n\n")
 
       const response = await generateInteractiveContent({
-        action: currentAction,
-        prompt: nextPrompt,
+        action: "chat",
+        prompt: promptText,
         profile,
         recommendation: result,
-        existingOutput: currentState.content,
+        existingOutput: conversationContext,
       })
 
       setGenerationState({
         ...currentState,
-        prompt: nextPrompt,
+        action: "chat",
         title: response.title,
-        content: response.content,
+        messages: [
+          ...newMessages,
+          { role: "assistant", content: response.content },
+        ],
         suggestions: response.suggestions,
         model: response.model,
         warning: response.warning,
@@ -155,16 +171,13 @@ export default function GenerationStudio() {
     }
   }
 
-  const handleExpand = () => {
-    const expandedPrompt = `${currentState.prompt}\n\nPlease expand the output with more detail, examples, and a clearer execution checklist.`
-    setGenerationState({
-      ...currentState,
-      prompt: expandedPrompt,
-    })
-    handleGenerate(expandedPrompt)
+  const handleSuggestionClick = (suggestion) => {
+    handleGenerate(suggestion)
   }
 
-  const goResult = () => navigate("/result")
+  const handleExampleClick = (prompt) => {
+    handleGenerate(prompt)
+  }
 
   if (!profile || !result) {
     return (
@@ -189,213 +202,197 @@ export default function GenerationStudio() {
 
   return (
     <PageTransition>
-      <section className="space-y-5 py-4">
+      <section className="generation-studio mx-auto max-w-5xl py-4 h-[calc(100vh-80px)] flex flex-col" style={{ gap: "0.75rem" }}>
         {/* Header */}
-        <div className="soft-panel animate-fade-in-up rounded-[32px] p-5 sm:p-6">
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-            <div>
-              <p className="flex items-center gap-2 text-xs uppercase tracking-[0.26em] text-cyan-700">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-                </svg>
-                AI Generation Workspace
-              </p>
-              <h2 className="mt-2 text-2xl font-bold tracking-tight text-slate-950 sm:text-3xl">
-                Generate, refine, and edit career guidance.
-              </h2>
-              <p className="mt-2 max-w-3xl text-sm leading-7 text-slate-500">
-                Start from your recommendation, adjust the prompt, regenerate as needed,
-                and edit the generated output directly before you use it.
-              </p>
-            </div>
-
-            <div className="flex-shrink-0 rounded-[20px] border border-slate-200/80 bg-white/85 px-4 py-3 text-sm text-slate-500 shadow-sm">
-              <span className="font-semibold text-slate-900">Current role:</span>{" "}
-              {result.role}
-            </div>
-          </div>
-        </div>
-
-        {/* Two-column Layout */}
-        <div className="grid gap-5 xl:grid-cols-[0.92fr_1.08fr]">
-
-          {/* ── Left: Actions & Prompt ── */}
-          <aside className="result-card animate-fade-in-up delay-1">
-            <p className="text-xs font-medium uppercase tracking-[0.2em] text-slate-400">
-              Actions
-            </p>
-            <div className="mt-4 space-y-2.5">
-              {Object.entries(ACTIONS).map(([action, meta]) => (
-                <button
-                  key={action}
-                  type="button"
-                  onClick={() => handleChangeAction(action)}
-                  className={`generation-action-card ${
-                    currentAction === action ? "generation-action-card-active" : ""
-                  }`}
-                >
-                  <span className="flex items-center gap-2.5 generation-action-title">
-                    <span className={currentAction === action ? "text-cyan-600" : "text-slate-400"}>
-                      {meta.icon}
-                    </span>
-                    {meta.title}
-                  </span>
-                  <span className="generation-action-copy">{meta.description}</span>
-                </button>
-              ))}
-            </div>
-
-            <div className="mt-5">
-              <Textarea
-                id="generationPrompt"
-                label="Prompt"
-                value={currentState.prompt}
-                showCount
-                onChange={(event) =>
-                  setGenerationState({
-                    ...currentState,
-                    prompt: event.target.value,
-                  })
-                }
-                className="min-h-[12rem]"
-              />
-            </div>
-
-            <div className="mt-5 grid gap-3 sm:grid-cols-2">
-              <Button
-                variant="primary"
-                loading={loading}
-                disabled={loading}
-                onClick={() => handleGenerate()}
-              >
-                {currentState.content ? "Regenerate" : "Generate"}
-              </Button>
-              <Button
-                variant="secondary"
-                loading={loading}
-                disabled={loading}
-                onClick={handleExpand}
-              >
-                Expand Output
-              </Button>
-            </div>
-
-            {currentState.suggestions?.length ? (
-              <div className="mt-5">
-                <p className="text-xs font-medium uppercase tracking-[0.2em] text-slate-400">
-                  Prompt Suggestions
-                </p>
-                <div className="mt-3 flex flex-wrap gap-2">
-                  {currentState.suggestions.map((suggestion) => (
-                    <button
-                      key={suggestion}
-                      type="button"
-                      onClick={() =>
-                        setGenerationState({
-                          ...currentState,
-                          prompt: `${currentState.prompt}\n\n${suggestion}`,
-                        })
-                      }
-                      className="result-nav-link animate-scale-in"
-                    >
-                      {suggestion}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            ) : null}
-          </aside>
-
-          {/* ── Right: Generated Output ── */}
-          <section className="result-card animate-fade-in-up delay-2">
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-              <div>
-                <p className="text-xs font-medium uppercase tracking-[0.2em] text-slate-400">
-                  Generated Output
-                </p>
-                <h3 className="mt-1.5 text-xl font-bold text-slate-950">
-                  {currentState.title || ACTIONS[currentAction].title}
-                </h3>
-              </div>
-
-              <div className="flex-shrink-0 rounded-[18px] border border-slate-200/80 bg-white/85 px-3.5 py-2.5 text-xs text-slate-500 shadow-sm">
-                <span className="font-semibold text-slate-800">Model:</span>{" "}
-                {currentState.model || "Waiting to generate"}
-              </div>
-            </div>
-
-            {currentState.warning ? (
-              <div className="mt-4 rounded-[20px] border border-amber-200 bg-amber-50/85 p-4 text-sm leading-7 text-slate-600">
-                <span className="font-semibold text-amber-700">⚠ Notice:</span>{" "}
-                {currentState.warning}
-              </div>
-            ) : null}
-
-            <ErrorBanner message={error} onDismiss={clearError} />
-
-            {loading ? <div className="mt-4"><Loader stages={["Generating content", "Formatting output", "Adding suggestions"]} /></div> : null}
-
-            <div className="mt-4">
-              <Textarea
-                id="generationTitle"
-                label="Title"
-                value={currentState.title}
-                onChange={(event) =>
-                  setGenerationState({
-                    ...currentState,
-                    title: event.target.value,
-                  })
-                }
-              />
-            </div>
-
-            <div className="mt-4">
-              <Textarea
-                id="generationContent"
-                label="Editable Output"
-                value={currentState.content}
-                showCount
-                onChange={(event) =>
-                  setGenerationState({
-                    ...currentState,
-                    content: event.target.value,
-                  })
-                }
-                className="min-h-[28rem] !resize-y"
-                placeholder="Generate content to begin editing."
-              />
-            </div>
-
-            <div className="mt-5 flex flex-wrap gap-3">
-              <Button
-                variant="primary"
-                loading={loading}
-                disabled={loading}
-                onClick={() => handleGenerate()}
-              >
-                Regenerate
-              </Button>
-              <Button
-                variant="secondary"
-                loading={loading}
-                disabled={loading}
-                onClick={handleExpand}
-              >
-                Expand
-              </Button>
-              <Button
-                variant="secondary"
-                onClick={goResult}
-              >
+        <div className="soft-panel animate-fade-in-up rounded-[32px] p-5 sm:p-6 flex-shrink-0">
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+            <div className="flex items-center gap-4">
+              <Button variant="secondary" size="compact" onClick={goResult}>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                   <line x1="19" y1="12" x2="5" y2="12" />
                   <polyline points="12 19 5 12 12 5" />
                 </svg>
-                Back to Results
+                Back
               </Button>
+              <h2 className="text-xl font-bold tracking-tight text-slate-950 sm:text-2xl">
+                AI Career Studio
+              </h2>
             </div>
-          </section>
+            <div className="flex items-center gap-2.5 flex-shrink-0">
+              {messages.length > 0 && (
+                <button
+                  onClick={handleNewChat}
+                  className="chat-new-btn"
+                  title="Start new conversation"
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                    <line x1="12" y1="5" x2="12" y2="19" />
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                  </svg>
+                  New Chat
+                </button>
+              )}
+              <div className="chat-status-badge">
+                <div className="flex items-center gap-1.5">
+                  <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
+                  <span className="font-semibold text-slate-900">{result.role}</span>
+                </div>
+                {/* <div className="w-px h-4 bg-slate-200"></div> */}
+                {/* <span>{currentState.model || "Ready"}</span> */}
+              </div>
+            </div>
+          </div>
+        </div>
 
+        <ErrorBanner message={error} onDismiss={clearError} />
+
+        {/* Chat UI Container */}
+        <div className="result-card chat-container flex flex-col flex-1 min-h-0 relative animate-fade-in-up delay-1 overflow-hidden">
+          {/* Messages Area */}
+          <div className="flex-1 overflow-y-auto no-scrollbar p-4 sm:p-6 sm:px-8 scroll-smooth" style={{ gap: "1.5rem", display: "flex", flexDirection: "column" }}>
+            {messages.length === 0 ? (
+              <div className="chat-welcome animate-fade-in">
+                {/* Welcome Hero */}
+                <div className="chat-welcome-hero">
+                  <div className="chat-welcome-icon">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
+                    </svg>
+                  </div>
+                  <h3 className="chat-welcome-title">
+                    How can I help you today?
+                  </h3>
+                  <p className="chat-welcome-subtitle">
+                    Ask me anything about your career path, skills, interview prep, resume tips, or get a personalized roadmap.
+                  </p>
+                </div>
+
+                {/* Example Prompts Grid */}
+                <div className="chat-examples-grid">
+                  {EXAMPLE_PROMPTS.map((example, index) => (
+                    <button
+                      key={index}
+                      onClick={() => handleExampleClick(example.prompt)}
+                      className="chat-example-card"
+                      style={{ animationDelay: `${index * 0.06}s` }}
+                    >
+                      <span className="chat-example-icon">{example.icon}</span>
+                      <span className="chat-example-label">{example.label}</span>
+                      <svg className="chat-example-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                        <polyline points="12 5 19 12 12 19" />
+                      </svg>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              messages.map((msg, index) => (
+                <div
+                  key={index}
+                  className={`chat-message-row ${msg.role === "user" ? "chat-message-row-user" : "chat-message-row-assistant"}`}
+                  style={{ animationDelay: `${Math.min(index * 0.05, 0.3)}s` }}
+                >
+                  {msg.role === "assistant" && (
+                    <div className="chat-avatar chat-avatar-ai">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
+                      </svg>
+                    </div>
+                  )}
+                  <div className={`chat-bubble ${msg.role === "user" ? "chat-bubble-user" : "chat-bubble-assistant"}`}>
+                    {msg.role === "user" ? (
+                      <p className="text-[0.95rem] whitespace-pre-wrap">{msg.content}</p>
+                    ) : (
+                      <MarkdownRenderer content={msg.content} />
+                    )}
+                  </div>
+                  {msg.role === "user" && (
+                    <div className="chat-avatar chat-avatar-user">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                        <circle cx="12" cy="7" r="4" />
+                      </svg>
+                    </div>
+                  )}
+                </div>
+              ))
+            )}
+
+            {loading && (
+              <div className="chat-message-row chat-message-row-assistant animate-fade-in">
+                <div className="chat-avatar chat-avatar-ai">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
+                  </svg>
+                </div>
+                <div className="chat-bubble chat-bubble-assistant">
+                  <div className="chat-typing-indicator">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                  </div>
+                </div>
+              </div>
+            )}
+            <div ref={chatEndRef} />
+          </div>
+
+          {/* Suggestions Bar */}
+          {!loading && currentState.suggestions?.length > 0 && messages.length > 0 && (
+            <div className="chat-suggestions-bar">
+              {currentState.suggestions.map((suggestion) => (
+                <button
+                  key={suggestion}
+                  onClick={() => handleSuggestionClick(suggestion)}
+                  className="chat-suggestion-chip"
+                >
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                    <polyline points="12 5 19 12 12 19" />
+                  </svg>
+                  {suggestion}
+                </button>
+              ))}
+            </div>
+          )}
+
+          {/* Input Area */}
+          <div className="chat-input-area">
+            <div className="chat-input-wrapper">
+              <textarea
+                ref={textareaRef}
+                id="chatPrompt"
+                value={chatInput}
+                onChange={(e) => setChatInput(e.target.value)}
+                placeholder="Ask anything about your career..."
+                className="chat-input-field"
+                rows={1}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && !e.shiftKey) {
+                    e.preventDefault()
+                    handleGenerate(chatInput)
+                  }
+                }}
+              />
+              <button
+                onClick={() => handleGenerate(chatInput)}
+                disabled={!chatInput.trim() || loading}
+                className="chat-send-btn"
+                aria-label="Send message"
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="22" y1="2" x2="11" y2="13" />
+                  <polygon points="22 2 15 22 11 13 2 9 22 2" />
+                </svg>
+              </button>
+            </div>
+            <div className="text-center mt-2">
+              <span className="chat-disclaimer">
+                AI can make mistakes. Verify important information.
+              </span>
+            </div>
+          </div>
         </div>
       </section>
     </PageTransition>
